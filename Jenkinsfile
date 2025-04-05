@@ -72,7 +72,7 @@ pipeline {
       }
     }
 
-    srage('Build & Push Docker Image') {
+    stage('Build & Push Docker Image') {
       steps {
         sh 'printenv'
         sh 'docker build -t nomadis/numeric-app:""$GIT_COMMIT"" .'
