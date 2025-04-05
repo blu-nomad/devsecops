@@ -74,9 +74,11 @@ pipeline {
 
     stage('Build & Push Docker Image') {
       steps {
-        sh 'printenv'
-        sh 'docker build -t nomadis/numeric-app:""$GIT_COMMIT"" .'
-        sh 'docker push nomadis/numeric-app:""$GIT_COMMIT""'
+        withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
+          sh 'printenv'
+          sh 'docker build -t nomadis/numeric-app:""$GIT_COMMIT"" .'
+          sh 'docker push nomadis/numeric-app:""$GIT_COMMIT""'
+        }
       }
     }
 
