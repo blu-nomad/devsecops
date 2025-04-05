@@ -72,6 +72,14 @@ pipeline {
       }
     }
 
+    srage('Build & Push Docker Image') {
+      steps {
+        sh 'printenv'
+        sh 'docker build -t nomadis/numeric-app:""$GIT_COMMIT"" .'
+        sh 'docker push nomadis/numeric-app:""$GIT_COMMIT""'
+      }
+    }
+
  //    stage('Mutation Tests - PIT') {
  //      steps {
  //        sh "mvn org.pitest:pitest-maven:mutationCoverage"
