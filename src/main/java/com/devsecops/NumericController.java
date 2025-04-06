@@ -13,7 +13,7 @@ public class NumericController {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	//private static final String baseURL = "http://node-service:5000/plusone";
-	private static final String baseURL = "http://10.32.0.5:5000/plusone";
+	private static final String baseURL = "http://10.32.0.4:5000/plusone";
 	
 	RestTemplate restTemplate = new RestTemplate();
 	

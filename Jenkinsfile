@@ -42,11 +42,20 @@ List<Map> getFailedStages( RunWrapper build ) {
 pipeline {
   agent any
 
+  // environment {
+  //   deploymentName = "devsecops"
+  //   containerName = "devsecops-container"
+  //   serviceName = "devsecops-svc"
+  //   imageName = "siddharth67/numeric-app:${GIT_COMMIT}"
+  //   applicationURL="http://devsecops-demo.eastus.cloudapp.azure.com"
+  //   applicationURI="/increment/99"
+  // }
+
   environment {
     deploymentName = "devsecops"
     containerName = "devsecops-container"
     serviceName = "devsecops-svc"
-    imageName = "siddharth67/numeric-app:${GIT_COMMIT}"
+    imageName = "nomadis/numeric-app:${GIT_COMMIT}"
     applicationURL="http://devsecops-demo.eastus.cloudapp.azure.com"
     applicationURI="/increment/99"
   }
@@ -91,6 +100,25 @@ pipeline {
     //     }
     //   }
     // }
+
+     stage('Build & Push Docker Image') {
+      steps {
+        withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
+          sh 'printenv'
+          sh 'nerdctl build -t nomadis/numeric-app:""$GIT_COMMIT"" .'
+          sh 'nerdctl push nomadis/numeric-app:""$GIT_COMMIT""'
+        }
+      }
+    }
+
+    stage('K8S deployment - DEV'){
+      steps{
+        withKubeConfig([credentialsId: 'kubeconfig']) {
+          sh "sed -i 's#replace#nomadis/numeric-app:${GIT_COMMIT}#g' k8s_deployment-service.yaml"
+          sh "kubectl apply -f k8s_deployment_service.yaml"
+        }
+      }
+    }
 
  //    stage('Mutation Tests - PIT') {
  //      steps {
