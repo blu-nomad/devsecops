@@ -53,8 +53,14 @@ pipeline {
 
   stages {
 
+    
+
     stage('Print jenkins Environment Variables'){
-      sh 'printenv'
+      steps {
+
+        sh 'printenv'
+
+      }      
     }
 
     stage('Build Artifact - Maven') {
