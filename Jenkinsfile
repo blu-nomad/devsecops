@@ -53,6 +53,10 @@ pipeline {
 
   stages {
 
+    stage('Print jenkins Environment Variables'){
+      sh 'printenv'
+    }
+
     stage('Build Artifact - Maven') {
       steps {
         sh "mvn clean package -DskipTests=true"
