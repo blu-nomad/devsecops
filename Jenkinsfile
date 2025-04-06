@@ -72,15 +72,15 @@ pipeline {
       }
     }
 
-    stage('Build & Push Docker Image') {
-      steps {
-        withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
-          sh 'printenv'
-          sh 'docker build -t nomadis/numeric-app:""$GIT_COMMIT"" .'
-          sh 'docker push nomadis/numeric-app:""$GIT_COMMIT""'
-        }
-      }
-    }
+    // stage('Build & Push Docker Image') {
+    //   steps {
+    //     withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
+    //       sh 'printenv'
+    //       sh 'docker build -t nomadis/numeric-app:""$GIT_COMMIT"" .'
+    //       sh 'docker push nomadis/numeric-app:""$GIT_COMMIT""'
+    //     }
+    //   }
+    // }
 
  //    stage('Mutation Tests - PIT') {
  //      steps {
