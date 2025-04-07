@@ -106,7 +106,7 @@ pipeline {
         withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
           sh 'printenv'
           sh 'nerdctl build -t nomadis/numeric-app:""$GIT_COMMIT"" .'
-          sh 'nerdctl push nomadis/numeric-app:""$GIT_COMMIT""'
+          //sh 'nerdctl push nomadis/numeric-app:""$GIT_COMMIT""'
         }
       }
     }
