@@ -106,7 +106,7 @@ pipeline {
        // withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
           sh 'printenv'
           sh 'sudo nerdctl build -t nomadis/numeric-app:""$GIT_COMMIT"" .'
-          sh 'sudo nerdctl save nomadis/numeric-app:""$GIT_COMMIT"" | /home/osboxes/image.tar'
+          sh 'sudo nerdctl save nomadis/numeric-app:""$GIT_COMMIT"" -o /home/osboxes/image.tar'
           //sh 'nerdctl push nomadis/numeric-app:""$GIT_COMMIT""'
         //}
       }
