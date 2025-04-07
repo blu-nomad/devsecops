@@ -106,20 +106,20 @@ pipeline {
        // withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
           sh 'printenv'
           sh 'sudo nerdctl build -t nomadis/numeric-app:""$GIT_COMMIT"" .'
-          sh 'sudo nerdctl save nomadis/numeric-app:""$GIT_COMMIT"" -o /home/osboxes/image.tar'
+          //sh 'sudo nerdctl save nomadis/numeric-app:""$GIT_COMMIT"" -o /home/osboxes/image.tar'
           //sh 'nerdctl push nomadis/numeric-app:""$GIT_COMMIT""'
         //}
       }
     }
 
-    // stage('K8S deployment - DEV'){
-    //   steps{
-    //     withKubeConfig([credentialsId: 'kubeconfig']) {
-    //       sh "sed -i 's#replace#nomadis/numeric-app:${GIT_COMMIT}#g' k8s_deployment-service.yaml"
-    //       sh "kubectl apply -f k8s_deployment_service.yaml"
-    //     }
-    //   }
-    // }
+    stage('K8S deployment - DEV'){
+      steps{
+        withKubeConfig([credentialsId: 'kubeconfig']) {
+          sh "sed -i 's#replace#nomadis/numeric-app:${GIT_COMMIT}#g' k8s_deployment-service.yaml"
+          sh "kubectl apply -f k8s_deployment_service.yaml"
+        }
+      }
+    }
 
  //    stage('Mutation Tests - PIT') {
  //      steps {
