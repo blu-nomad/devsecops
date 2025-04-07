@@ -115,8 +115,9 @@ pipeline {
     stage('K8S deployment - DEV'){
       steps{
         withKubeConfig([credentialsId: 'kubeconfig']) {
-          sh "sed -i 's#replace#nomadis/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
-          sh "kubectl apply -f k8s_deployment_service.yaml"
+          //sh "sed -i 's#replace#nomadis/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
+          //sh "kubectl apply -f k8s_deployment_service.yaml"
+          sh 'kubectl run -p 8080:8090 nomadis/numeric-app:""$GIT_COMMIT""'
         }
       }
     }
