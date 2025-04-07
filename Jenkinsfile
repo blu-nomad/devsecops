@@ -103,11 +103,11 @@ pipeline {
 
      stage('Build & Push Docker Image') {
       steps {
-        withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
+       // withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
           sh 'printenv'
           sh 'nerdctl build -t nomadis/numeric-app:""$GIT_COMMIT"" .'
           //sh 'nerdctl push nomadis/numeric-app:""$GIT_COMMIT""'
-        }
+        //}
       }
     }
 
