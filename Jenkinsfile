@@ -1,4 +1,4 @@
-@Library('slack') _
+//@Library('slack') _
 
 
 /////// ******************************* Code for fectching Failed Stage Name ******************************* ///////
@@ -42,29 +42,99 @@ List<Map> getFailedStages( RunWrapper build ) {
 pipeline {
   agent any
 
+  // environment {
+  //   deploymentName = "devsecops"
+  //   containerName = "devsecops-container"
+  //   serviceName = "devsecops-svc"
+  //   imageName = "siddharth67/numeric-app:${GIT_COMMIT}"
+  //   applicationURL="http://devsecops-demo.eastus.cloudapp.azure.com"
+  //   applicationURI="/increment/99"
+  // }
+
   environment {
     deploymentName = "devsecops"
     containerName = "devsecops-container"
     serviceName = "devsecops-svc"
-    imageName = "siddharth67/numeric-app:${GIT_COMMIT}"
-    applicationURL="http://devsecops-demo.eastus.cloudapp.azure.com"
+    imageName = "nomadis/numeric-app:${GIT_COMMIT}"
+    applicationURL="http://192.168.4"
     applicationURI="/increment/99"
+    dockerhubcreds = credentials('docker-hub-secret')
   }
 
   stages {
 
- //    stage('Build Artifact - Maven') {
- //      steps {
- //        sh "mvn clean package -DskipTests=true"
- //        archive 'target/*.jar'
- //      }
- //    }
+    
 
- //    stage('Unit Tests - JUnit and JaCoCo') {
- //      steps {
- //        sh "mvn test"
- //      }
- //    }
+    stage('Print jenkins Environment Variables'){
+      steps {
+
+        sh 'printenv'
+
+      }      
+    }
+
+    stage('Build Artifact - Maven') {
+      steps {
+        sh "mvn clean package -DskipTests=true"
+        archiveArtifacts  'target/*.jar'
+      }
+    }
+
+    // stage('Unit Tests - JUnit and JaCoCo') {
+    //   steps {
+    //     sh "mvn test"
+    //   }
+    //   post {
+    //     always {
+    //       junit 'target/surefire-reports/*.xml'
+    //       jacoco execPattern: 'target/jacoco.exec'
+    //     }
+    //   }
+    // }
+
+    // stage('Build & Push Docker Image') {
+    //   steps {
+    //     withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
+    //       sh 'printenv'
+    //       sh 'docker build -t nomadis/numeric-app:""$GIT_COMMIT"" .'
+    //       sh 'docker push nomadis/numeric-app:""$GIT_COMMIT""'
+    //     }
+    //   }
+    // }
+
+     stage('Build & Push Docker Image') {
+      steps {
+           // withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
+          
+          //sh 'sudo nerdctl login -u registryuser -p osboxesdotorg --insecure-registry osboxes:5000'
+          //sh 'sudo nerdctl tag numeric-app:""$GIT_COMMIT"" osboxes:5000/numeric-app/numeric-app:""$GIT_COMMIT""'
+          //sh 'sudo nerdctl push --insecure-registry osboxes:5000/numeric-app/numeric-app:""$GIT_COMMIT""'
+          //sh 'sudo nerdctl login -u nomadis -p "J8e6qY74pEH8qWM" hub.docker.com'
+          //sh 'sudo nerdctl save nomadis/numeric-app:""$GIT_COMMIT"" -o /home/osboxes/image.tar'
+          //}
+       
+       
+          sh 'printenv'
+          sh 'sudo nerdctl build -t nomadis/numeric-app:""$GIT_COMMIT"" .'
+          sh 'echo "Done building"'
+          
+          sh 'sudo nerdctl login -u nomadis -p ${dockerhubcreds}' 
+          sh 'sudo nerdctl push nomadis/numeric-app:""$GIT_COMMIT""'
+        
+      }
+    }
+
+    stage('K8S deployment - DEV'){
+      steps{
+        withKubeConfig([credentialsId: 'kubeconfig']) {
+          sh "sed -i 's#replace#nomadis/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
+          //sh "sed -i 's#replace#osboxes:5000/numeric-app/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
+          //sh "kubectl apply  --insecure-skip-tls-verify=true -f k8s_deployment_service.yaml"
+          sh "kubectl apply  -f k8s_deployment_service.yaml"
+          //sh 'kubectl run -p 8080:8090 nomadis/numeric-app:""$GIT_COMMIT""'
+        }
+      }
+    }
 
  //    stage('Mutation Tests - PIT') {
  //      steps {
@@ -249,7 +319,7 @@ pipeline {
 
   }
 
-  post { 
+  //post { 
      //    always { 
      //      junit 'target/surefire-reports/*.xml'
      //      jacoco execPattern: 'target/jacoco.exec'
@@ -260,25 +330,27 @@ pipeline {
  		  // //Use sendNotifications.groovy from shared library and provide current build result as parameter 
      //      //sendNotification currentBuild.result
      //    }
-
-        success {
-        	script {
+     
+        //success {
+        	//script {
 		        /* Use slackNotifier.groovy from shared library and provide current build result as parameter */  
-		        env.failedStage = "none"
-		        env.emoji = ":white_check_mark: :tada: :thumbsup_all:" 
-		        sendNotification currentBuild.result
-		      }
-        }
+		        //env.failedStage = "none"
+		       // env.emoji = ":white_check_mark: :tada: :thumbsup_all:" 
+		      //  sendNotification currentBuild.result
+		     // }
+       // }
 
-	    failure {
-	    	script {
+	   // failure {
+	    //	script {
 			  //Fetch information about  failed stage
-		      def failedStages = getFailedStages( currentBuild )
-	          env.failedStage = failedStages.failedStageName
-	          env.emoji = ":x: :red_circle: :sos:"
-		      sendNotification currentBuild.result
-		    }	
-	    }
-    }
+		    //  def failedStages = getFailedStages( currentBuild )
+	        //  env.failedStage = failedStages.failedStageName
+	        //  env.emoji = ":x: :red_circle: :sos:"
+		     // sendNotification currentBuild.result
+		   // }	
+        
+	  //  }
+      
+  //  }
 
 }
