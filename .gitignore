@@ -26,3 +26,7 @@ bin
 .classpath
 .project
 target
+
+# Talisman exclusion config file
+.talismanrc
+.talismanrc
