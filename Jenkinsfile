@@ -106,11 +106,16 @@ pipeline {
 
     stage('SonarQube Static Analysis') {
       steps {
-        def mvn = tool 'Default Maven';
         withSonarQubeEnv() {
-          sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application' -Dsonar.host.url=http://192.168.1.186:9000"
+          sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application' -Dsonar.host.url=http://192.168.1.186:9000"
         }
-      }        
+      }
+      // steps {
+      //   def mvn = tool 'Default Maven';
+      //   withSonarQubeEnv() {
+      //     sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application' -Dsonar.host.url=http://192.168.1.186:9000"
+      //   }
+      // }        
     }
 
     // stage('Build & Push Docker Image') {
