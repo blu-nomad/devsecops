@@ -118,17 +118,18 @@ pipeline {
 	 	              -Dsonar.projectKey=numeric-application"
 	        }          
       }
-      stage('Quality Gate') {
-        steps {
-          timeout(time: 2, unit: 'MINUTES') {
-           script {
-             waitForQualityGate abortPipeline: true
-           }
+    }
+    
+    stage('Quality Gate') {
+      steps {
+        timeout(time: 2, unit: 'MINUTES') {
+          script {
+            waitForQualityGate abortPipeline: true
           }
         }
-      }          
-    }
-
+      }
+    }          
+    
     // stage('Build & Push Docker Image') {
     //   steps {
     //     withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
