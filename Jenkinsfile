@@ -117,13 +117,14 @@ pipeline {
             sh "mvn sonar:sonar \
 	 	              -Dsonar.projectKey=numeric-application"
 	        }
+
+          timeout(time: 2, unit: 'MINUTES') {
+           script {
+             waitForQualityGate abortPipeline: true
+           }
+         }
       } 
-      // steps {
-      //   def mvn = tool 'Default Maven';
-      //   withSonarQubeEnv() {
-      //     sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application' -Dsonar.host.url=http://192.168.1.186:9000"
-      //   }
-      // }        
+          
     }
 
     // stage('Build & Push Docker Image') {
