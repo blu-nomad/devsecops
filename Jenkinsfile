@@ -113,7 +113,7 @@ pipeline {
       } */
 
       steps {
-          withSonarQubeEnv(instalationName: 'sonarqubeSrvr') {
+          withSonarQubeEnv(installationName: 'sonarqubeSrvr') {
             sh "mvn sonar:sonar \
 	 	              -Dsonar.projectKey=numeric-application"
 	        }
