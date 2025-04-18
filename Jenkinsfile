@@ -105,12 +105,19 @@ pipeline {
     }
 
     stage('SonarQube Static Analysis') {
-      
+      /*
       steps {
         //withSonarQubeEnv() {
           sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application' -Dsonar.token=sqa_8033b618a69753e6c3f11cf89c51fa982a6ddec7 -Dsonar.host.url=http://192.168.1.186:9000"
         //}
-      }
+      } */
+
+      steps {
+          withSonarQubeEnv(instalationName: 'sonarqubeSrvr') {
+            sh "mvn sonar:sonar \
+	 	              -Dsonar.projectKey=numeric-application"
+	        }
+      } 
       // steps {
       //   def mvn = tool 'Default Maven';
       //   withSonarQubeEnv() {
