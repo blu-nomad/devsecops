@@ -116,19 +116,25 @@ pipeline {
           withSonarQubeEnv(installationName: 'sonarqubeSrvr') {
             sh "mvn sonar:sonar \
 	 	              -Dsonar.projectKey=numeric-application"
-	        }          
+	        }
+
+          timeout(time: 1, unit: 'MINUTES') {
+          script {
+            waitForQualityGate abortPipeline: true
+          }
+        }          
       }
     }
-    
-    stage('Quality Gate') {
+
+    /* stage('Quality Gate') {
       steps {
-        timeout(time: 2, unit: 'MINUTES') {
+        timeout(time: 1, unit: 'MINUTES') {
           script {
             waitForQualityGate abortPipeline: true
           }
         }
       }
-    }          
+    }      */     
     
     // stage('Build & Push Docker Image') {
     //   steps {
