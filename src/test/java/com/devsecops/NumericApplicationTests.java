@@ -3,6 +3,8 @@ package com.devsecops;
 
 //import org.junit.Test;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.TestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +26,8 @@ public class NumericApplicationTests {
     private MockMvc mockMvc;
 
     @Test
-    public void smallerThanOrEqualToFiftyMessage() throws Exception {
+    @DisplayName("JUnit test compare to 50")
+    public void smallerThanOrEqualToFiftyMessage(TestInfo testInfo) throws Exception {
         this.mockMvc.perform(get("/compare/50")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string("Smaller than or equal to 50"));
     }
