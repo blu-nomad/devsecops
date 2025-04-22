@@ -3,8 +3,8 @@ package com.devsecops;
 
 //import org.junit.Test;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.TestInfo;
+/* import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.TestInfo; */
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,11 +13,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+/* import org.junit.runner.RunWith;
+import org.springframework.test.context.junit4.SpringRunner; */
 
 
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class NumericApplicationTests {
@@ -26,8 +26,9 @@ public class NumericApplicationTests {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("JUnit test compare to 50")
-    public void smallerThanOrEqualToFiftyMessage(TestInfo testInfo) throws Exception {
+    //@DisplayName("JUnit test compare to 50")
+    public void smallerThanOrEqualToFiftyMessage() throws Exception {
+    //public void smallerThanOrEqualToFiftyMessage(TestInfo testInfo) throws Exception {
         this.mockMvc.perform(get("/compare/50")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string("Smaller than or equal to 50"));
     }
