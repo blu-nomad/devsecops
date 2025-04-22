@@ -82,7 +82,7 @@ pipeline {
 
     stage('Unit Tests - JUnit and JaCoCo') {
       steps {
-        sh "mvn clean test"
+        sh "mvn test"
       }
       post {
         always {
