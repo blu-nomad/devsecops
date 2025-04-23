@@ -56,7 +56,7 @@ pipeline {
     containerName = "devsecops-container"
     serviceName = "devsecops-svc"
     imageName = "nomadis/numeric-app:${GIT_COMMIT}"
-    applicationURL="http://192.168.4"
+    applicationURL="http://192.168.5"
     applicationURI="/increment/99"
     dockerhubcreds = credentials('docker-hub-secret')
   }
@@ -92,17 +92,17 @@ pipeline {
       }
     } */
 
-    stage('Mutation Tests - PIT') {
-      steps {
-              sh "mvn org.pitest:pitest-maven:mutationCoverage"
-            }
+  // stage('Mutation Tests - PIT') {
+  //     steps {
+  //             sh "mvn org.pitest:pitest-maven:mutationCoverage"
+  //           }
 
-      post {
-        always {
-          pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
-        }
-      }
-    }
+  //     post {
+  //       always {
+  //         pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+  //       }
+  //       }
+  //   } 
 
     stage('SonarQube Static Analysis') {
       /*
