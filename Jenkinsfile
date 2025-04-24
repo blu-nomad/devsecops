@@ -133,20 +133,7 @@ pipeline {
       }    
     }
 
-    post {
-      always {
-        dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-      }
-
-      // success {
-
-      // }
-
-      // failure {
-
-      // }
-
-    }
+    
       /* steps {
         parallel(
         	"Dependency Scan": {
@@ -383,11 +370,11 @@ pipeline {
       }
     }
 
-   stage('Testing Slack - Error Stage') {
-      steps {
-          sh 'exit 0'
+    stage('Testing Slack - Error Stage') {
+        steps {
+            sh 'exit 0'
+        }
       }
-    }
 
   }
 
@@ -424,5 +411,20 @@ pipeline {
 	  //  }
       
   //  }
+
+  post {
+      always {
+        dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+      }
+
+      // success {
+
+      // }
+
+      // failure {
+
+      // }
+
+    }
 
 }
