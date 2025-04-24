@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11
+FROM adoptopenjdk/openjdk15
 EXPOSE 8080
 ARG JAR_FILE=target/*.jar
 RUN addgroup pipeline
